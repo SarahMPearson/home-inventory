@@ -16,5 +16,13 @@ Item.prototype.save = function(cb){
   }); 
 };
 
+Item.find = function(query, cb){
+  cItem.find(query).toArray(function(err, items){
+    console.log(items);
+    cb(items);
+  });
+};
+
+
 module.exports = Item;
 
