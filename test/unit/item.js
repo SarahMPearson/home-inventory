@@ -66,7 +66,7 @@ describe('Item', function(){
 
     it('should find only the requested items from the mongo database', function(done){
       var couch = new Item('couch', 'living room', '7/11/2014', '1', '200');
-      var chair = new Item('chair', 'living room', '7/11/2014', '4', '150');
+      var chair = new Item('chair', 'dining room', '7/11/2014', '4', '150');
       var chair2 = new Item('chair', 'living room', '7/11/2014', '1', '200');
       var table = new Item('table', 'dining room', '7/11/2014', '1', '200');
       couch.save(function(){
@@ -76,6 +76,35 @@ describe('Item', function(){
               Item.find({name:'chair'}, function(items){
                 expect(items).to.have.length(2);
                 expect(items[0].name).to.equal('chair');
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('#value', function(){
+    it('should return total value of a single item', function(){
+      var chair = new Item('chair', 'living room', '7/11/2014', '4', '150');
+      var val = chair.value();
+      expect(val).to.equal(600);
+    });
+  });
+
+  describe('.value', function(){
+    it('should return the total value of selected items in db', function(done){
+      var couch = new Item('couch', 'living room', '7/11/2014', '1', '200');
+      var chair = new Item('chair', 'dining room', '7/11/2014', '4', '150');
+      var chair2 = new Item('chair', 'living room', '7/11/2014', '1', '200');
+      var table = new Item('table', 'dining room', '7/11/2014', '1', '200');
+      couch.save(function(){
+        chair.save(function(){
+          chair2.save(function(){
+            table.save(function(){
+              Item.value({room:'dining room'}, function(value){
+                expect(value).to.equal(800);
                 done();
               });
             });
