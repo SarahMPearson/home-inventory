@@ -75,6 +75,7 @@ describe('Item', function(){
             table.save(function(){
               Item.find({name:'chair'}, function(items){
                 expect(items).to.have.length(2);
+                expect(items[0].name).to.equal('chair');
                 done();
               });
             });
